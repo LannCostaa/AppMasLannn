@@ -3,123 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasLannn App</title>
+    <title>Transkripsi Suara Real-Time</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f4f4f9;
-        }
-        .mic-active {
+        .pulse-animation {
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen flex-col bg-gray-100 p-4">
-    <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md">
-        <h1 class="text-3xl font-bold text-center mb-6 text-blue-600">Transkripsi Suara</h1>
+<body class="bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-2xl rounded-xl p-8 w-full max-w-md">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Transkripsi Suara</h1>
         
-        <div class="flex space-x-4 mb-6">
-            <button id="startBtn" class="flex-1 bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition flex items-center justify-center">
+        <div class="flex justify-center space-x-4 mb-6">
+            <button id="startBtn" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
                 Mulai
             </button>
-            <button id="stopBtn" class="flex-1 bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition flex items-center justify-center">
+            
+            <button id="stopBtn" class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition duration-300 flex items-center" disabled>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Berhenti
             </button>
-        </div>
-
-        <div class="bg-gray-100 rounded-lg p-4 mb-4">
-            <textarea id="resultText" class="w-full h-40 p-2 bg-transparent resize-none" placeholder="Hasil transkripsi akan muncul di sini..." readonly></textarea>
-        </div>
-
-        <div class="flex space-x-4">
-            <button id="playBtn" class="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition flex items-center justify-center">
+            
+            <button id="downloadBtn" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300 flex items-center" disabled>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Putar Teks
-            </button>
-            <button id="downloadBtn" class="flex-1 bg-purple-500 text-white py-3 rounded-lg hover:bg-purple-600 transition flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
                 Unduh
             </button>
         </div>
-    </div>
 
-    <div class="fixed bottom-4 left-4 text-gray-500 text-sm">
-        © 2024 Copyright By MasLannDev. All Rights Reserved.
+        <div id="recordingIndicator" class="hidden text-center mb-4">
+            <div class="flex items-center justify-center">
+                <div class="w-4 h-4 bg-red-500 rounded-full pulse-animation mr-2"></div>
+                <span class="text-gray-700">Rekaman Sedang Berlangsung...</span>
+            </div>
+        </div>
+
+        <div class="bg-gray-100 rounded-lg p-4 min-h-[200px] relative">
+            <textarea id="transcriptArea" class="w-full h-full bg-transparent resize-none focus:outline-none" placeholder="Teks transkripsi akan muncul di sini..." readonly></textarea>
+            <button id="playTextBtn" class="absolute bottom-2 right-2 bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition duration-300" title="Putar Teks">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     <script>
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const playBtn = document.getElementById('playBtn');
         const downloadBtn = document.getElementById('downloadBtn');
-        const resultText = document.getElementById('resultText');
+        const transcriptArea = document.getElementById('transcriptArea');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const playTextBtn = document.getElementById('playTextBtn');
 
-        // Speech Recognition Setup
+        // Check browser support
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'id-ID';
+        
+        if (!SpeechRecognition) {
+            alert('Browser Anda tidak mendukung Speech Recognition. Silakan gunakan Chrome atau Edge.');
+            startBtn.disabled = true;
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'id-ID';  // Set language to Indonesian
 
-        let finalTranscript = '';
+            recognition.onstart = () => {
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                downloadBtn.disabled = true;
+                recordingIndicator.classList.remove('hidden');
+                transcriptArea.value = '';
+            };
 
-        recognition.onresult = (event) => {
-            let interimTranscript = '';
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                
+                transcriptArea.value = transcript;
+            };
 
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript + ' ';
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
+            recognition.onend = () => {
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                downloadBtn.disabled = false;
+                recordingIndicator.classList.add('hidden');
+            };
+
+            startBtn.addEventListener('click', () => {
+                recognition.start();
+            });
+
+            stopBtn.addEventListener('click', () => {
+                recognition.stop();
+            });
+
+            downloadBtn.addEventListener('click', () => {
+                if (transcriptArea.value.trim() === '') {
+                    alert('Tidak ada teks untuk diunduh.');
+                    return;
                 }
-            }
 
-            resultText.value = finalTranscript + interimTranscript;
-        };
+                const blob = new Blob([transcriptArea.value], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'transkripsi_' + new Date().toISOString().replace(/:/g, '-') + '.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
 
-        startBtn.addEventListener('click', () => {
-            startBtn.classList.add('mic-active');
-            recognition.start();
-        });
+            // Text-to-Speech functionality
+            playTextBtn.addEventListener('click', () => {
+                const text = transcriptArea.value.trim();
+                if (text === '') {
+                    alert('Tidak ada teks untuk diputar.');
+                    return;
+                }
 
-        stopBtn.addEventListener('click', () => {
-            startBtn.classList.remove('mic-active');
-            recognition.stop();
-        });
+                // Check if Speech Synthesis is supported
+                if ('speechSynthesis' in window) {
+                    // Stop any ongoing speech
+                    speechSynthesis.cancel();
 
-        playBtn.addEventListener('click', () => {
-            const utterance = new SpeechSynthesisUtterance(resultText.value);
-            utterance.lang = 'id-ID';
-            speechSynthesis.speak(utterance);
-        });
+                    // Create a new speech utterance
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    
+                    // Set language to Indonesian
+                    utterance.lang = 'id-ID';
 
-        downloadBtn.addEventListener('click', () => {
-            const blob = new Blob([resultText.value], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'transkripsi_suara.txt';
-            link.click();
-        });
+                    // Optional: Adjust speech parameters
+                    utterance.rate = 1; // Speed of speech
+                    utterance.pitch = 1; // Pitch of speech
 
-        recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-        };
+                    // Speak the text
+                    speechSynthesis.speak(utterance);
+                } else {
+                    alert('Browser Anda tidak mendukung Text-to-Speech.');
+                }
+            });
+        }
     </script>
 </body>
 </html>
